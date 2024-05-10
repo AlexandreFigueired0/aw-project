@@ -126,7 +126,7 @@ components:
           type: "array"
           items:
             type: "string"
-    ProductsInStockInMarket:
+    ProductStockInMarket:
       type: "object"
       required:
         - id
@@ -582,4 +582,294 @@ paths:
       responses:
         "200":
           description: "Successfully deleted Market"
+          
+  /stats:
+    get:
+      tags:
+        - "StatisticsManagement"
+      summary: "Returns the list of all statistics in the system"
+      responses:
+        "200":
+          description: "Successfully read statistics list"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Stats"
+    post:
+      tags:
+        - "StatisticsManagement"
+      summary: "Creates a Stat"
+      requestBody:
+              description: "The Stat to add"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Stats'
+      responses:
+        "200":
+          description: "Successfully added User"
+
+  /stats/{stat_id}:
+    get:
+      tags:
+        - "StatisticsManagement"
+      summary: "Returns the Stat with the given id"
+      parameters:
+        - $ref: "#/components/parameters/stat_id"
+      responses:
+        "200":
+          description: "Successfully read Stat"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stats'
+    put:
+      tags:
+        - "StatisticsManagement"
+      summary: "Update the Stat with the given id"
+      parameters:
+        - $ref: "#/components/parameters/stat_id"
+      requestBody:
+              description: "Stat updated"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Stats'
+      responses:
+        "200":
+          description: "Successfully updated Stat"
+    delete:
+      tags:
+        - "StatisticsManagement"
+      summary: "Deletes the Stat with the given id"
+      parameters:
+        - $ref: "#/components/parameters/stat_id"
+      responses:
+        "200":
+          description: "Successfully deleted Stat"
+          
+  /stats/latest:
+    get:
+      tags:
+        - "StatisticsManagement"
+      summary: "Returns the latest Stat"
+      responses:
+        "200":
+          description: "Successfully read Stat"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stats'
+  
+  /maps/{location}:
+    get:
+      tags:
+        - "MapManagement"
+      summary: "Returns the information for the map in the app"
+      parameters:
+        - $ref: "#/components/parameters/location"
+      responses:
+        "200":
+          description: "Successfully processed location details"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: "string"
+  
+  /market_products:
+    get:
+      tags:
+        - "MarketProductsInStockManagement"
+      summary: "Returns the list of all Products stocks in all Markets"
+      responses:
+        "200":
+          description: "Successfully read list of ProductsStockInMarket for all markets"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ProductStockInMarket"
+    post:
+      tags:
+        - "MarketProductsInStockManagement"
+      summary: "Create a ProductStockInMarket"
+      requestBody:
+              description: "The ProductStockInMarket to add"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/ProductStockInMarket'
+      responses:
+        "200":
+          description: "Successfully added ProductStockInMarket"
+  /market_products/{market_id}:
+    get:
+      tags:
+        - "MarketProductsInStockManagement"
+      summary: "Returns the list of all product stocks in the market with market_id"
+      parameters:
+        - $ref: "#/components/parameters/market_id"
+      responses:
+        "200":
+          description: "Successfully read the list of ProductStockInMarket"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/ProductStockInMarket'
+    delete:
+      tags:
+        - "MarketProductsInStockManagement"
+      summary: "Deletes all ProductStockInMarket for the Market, with market_id"
+      parameters:
+        - $ref: "#/components/parameters/market_id"
+      responses:
+        "200":
+          description: "Successfully deleted all ProductStockInMarkets, for the Market with market_id"
+                
+
+  /market_products/{market_id}/{product_id}:
+    get:
+      tags:
+        - "MarketProductsInStockManagement"
+      summary: "Returns the ProductStockInMarket in the Market, with market_id, for the Product, with product_id"
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+        - $ref: "#/components/parameters/market_id"
+      responses:
+        "200":
+          description: "Successfully read the ProductStockInMarket"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductStockInMarket'
+    put:
+      tags:
+        - "MarketProductsInStockManagement"
+      summary: "Update the ProductStockInMarket in the Market, with market_id, for the Product, with product_id"
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+        - $ref: "#/components/parameters/market_id"
+      requestBody:
+              description: "ProductStockInMarket updated"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/ProductStockInMarket'
+      responses:
+        "200":
+          description: "Successfully updated ProductStockInMarket"
+    delete:
+      tags:
+        - "MarketProductsInStockManagement"
+      summary: "Deletes the ProductStockInMarket"
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+        - $ref: "#/components/parameters/market_id"
+      responses:
+        "200":
+          description: "Successfully deleted ProductStockInMarket"
+  
+  /user_products:
+    get:
+      tags:
+        - "UserSavedProductsManagement"
+      summary: "Returns the list of all ProductsSavedByUser, for all users"
+      responses:
+        "200":
+          description: "Successfully read list of ProductsSavedByUser for all users"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ProductsSavedByUser"
+    post:
+      tags:
+        - "UserSavedProductsManagement"
+      summary: "Create a ProductStockInMarket"
+      requestBody:
+              description: "The ProductsSavedByUser to add"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/ProductsSavedByUser'
+      responses:
+        "200":
+          description: "Successfully added ProductsSavedByUser"
+  /{user_id}:
+    get:
+      tags:
+        - "UserSavedProductsManagement"
+      summary: "Returns the list of all ProductsSavedByUser, for the user with user_id"
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: "Successfully read the list of ProductsSavedByUser"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/ProductsSavedByUser'
+    delete:
+      tags:
+        - "UserSavedProductsManagement"
+      summary: "Deletes all ProductsSavedByUser for the User, with user_id"
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: "Successfully deleted all ProductsSavedByUser, for the User with user_id"
+                
+
+  /user_products/{user_id}/{product_id}:
+    get:
+      tags:
+        - "UserSavedProductsManagement"
+      summary: "Returns the ProductsSavedByUser for the User, with user_id, and the Product, with product_id"
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: "Successfully read the ProductsSavedByUser"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductsSavedByUser'
+    put:
+      tags:
+        - "UserSavedProductsManagement"
+      summary: "Update the ProductsSavedByUser for the User, with user_id, and the Product, with product_id"
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+        - $ref: "#/components/parameters/user_id"
+      requestBody:
+              description: "ProductsSavedByUser updated"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/ProductsSavedByUser'
+      responses:
+        "200":
+          description: "Successfully updated ProductsSavedByUser"
+    delete:
+      tags:
+        - "MarketProductsInStockManagement"
+      summary: "Deletes the ProductsSavedByUser"
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: "Successfully deleted ProductsSavedByUser"
+
                 
