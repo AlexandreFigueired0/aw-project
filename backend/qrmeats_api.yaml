@@ -1,0 +1,585 @@
+openapi: 3.0.0
+info:
+  title: "QRMeats API"
+  description: "API for meats and markets"
+  version: "1.0.0"
+
+servers:
+  - url: "/api"
+
+tags:
+  - name: "Authentication"
+    description: "Manages authentication logic"
+    
+  - name: "UsersManagement"
+    description: "Manages Users"
+    
+  - name: "NewsManagement"
+    description: "Manages News"
+    
+  - name: "MarketsManagement"
+    description: "Manages Markets"
+    
+  - name: "FeedbackManagement"
+    description: "Manages feedback"
+    
+  - name: "StatisticsManagement"
+    description: "Manages statistics"
+
+  - name: "MapManagement"
+    description: "Manages the maps"
+    
+  - name: "MarketProductsInStockManagement"
+    description: "Manages the stock of the markets"
+    
+  - name: "UserSavedProductsManagement"
+    description: "Manages the products saved by users"
+    
+
+components:
+  schemas:
+    User:
+      type: "object"
+      required:
+        - id
+        - username
+        - password
+        - email
+        - photo_url
+      properties:
+        id:
+          type: "string"
+        username:
+          type: "string"
+        password:
+          type: "string"
+        email:
+          type: "string"
+        photo_url:
+          type: "string"
+    Product:
+      type: "object"
+      required:
+        - id
+        - name
+        - details
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+        details:
+          type: "array"
+          items:
+            type: "string"
+    News:
+      type: "object"
+      required:
+        - id
+        - title
+        - source
+        - main_text
+      properties:
+        id:
+          type: "string"
+        title:
+          type: "string"
+        source:
+          type: "string"
+        main_text:
+          type: "string"
+    Market:
+      type: "object"
+      required:
+        - id
+        - name
+        - location
+      properties:
+        id:
+          type: "string"
+        name:
+          type: "string"
+        location:
+          type: "string"
+    Feedback:
+      type: "object"
+      required:
+        - id
+        - user_id
+        - product_id
+      properties:
+        id:
+          type: "string"
+        user_id:
+          type: "string"
+        product_id:
+          type: "string"
+    Stats:
+      type: "object"
+      required:
+        - id
+        - stats
+      properties:
+        id:
+          type: "string"
+        stats:
+          type: "array"
+          items:
+            type: "string"
+    ProductsInStockInMarket:
+      type: "object"
+      required:
+        - id
+        - market_id
+        - product_id
+        - quantity
+      properties:
+        id:
+          type: "string"
+        market_id:
+          type: "string"
+        product_id:
+          type: "string"
+        quantity:
+          type: "integer"
+    ProductsSavedByUser:
+      type: "object"
+      required:
+        - id
+        - user_id
+        - product_id
+      properties:
+        id:
+          type: "string"
+        user_id:
+          type: "string"
+        product_id:
+          type: "string"
+
+
+  parameters:
+    user_id:
+      name: "user_id"
+      description: "Id of the user"
+      in: path
+      required: True
+      schema:
+        type: "string"
+    product_id:
+      name: "product_id"
+      description: "Id of the product"
+      in: path
+      required: True
+      schema:
+        type: "string"
+    market_id:
+      name: "market_id"
+      description: "Id of the market"
+      in: path
+      required: True
+      schema:
+        type: "string"
+    news_id:
+      name: "news_id"
+      description: "Id of the new"
+      in: path
+      required: True
+      schema:
+        type: "string"
+    stat_id:
+      name: "stat_id"
+      description: "Id of the stat"
+      in: path
+      required: True
+      schema:
+        type: "string"
+    location:
+      name: "location"
+      description: "Text representation of a location"
+      in: path
+      required: True
+      schema:
+        type: "string"
+      
+      
+
+paths:
+  /authentication:
+    post:
+      tags: 
+        - "Authentication"
+      summary: "Authenticates the user"
+      requestBody:
+              description: "Authentication token"
+              content:
+                application/json:
+                  schema:
+                    type: "string"
+      responses:
+        "200":
+          description: "Successfully authenticated"
+          
+  /users:
+    get:
+      tags:
+        - "UsersManagement"
+      summary: "Returns the list of all users in the system"
+      responses:
+        "200":
+          description: "Successfully read users list"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/User"
+    post:
+      tags:
+        - "UsersManagement"
+      summary: "Creates a User"
+      requestBody:
+              description: "The User to add"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/User'
+      responses:
+        "200":
+          description: "Successfully added User"
+
+  /users/{user_id}:
+    get:
+      tags:
+        - "UsersManagement"
+      summary: "Returns the User with the given id"
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: "Successfully read User details"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      tags:
+        - "UsersManagement"
+      summary: "Update the User with the given id"
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      requestBody:
+              description: "User updated"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/User'
+      responses:
+        "200":
+          description: "Successfully updated User"
+    delete:
+      tags:
+        - "UsersManagement"
+      summary: "Deletes the User with the given id"
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: "Successfully deleted User"
+          
+  /products:
+    get:
+      tags:
+        - "ProductsManagement"
+      summary: "Returns the list of all products in the system"
+      responses:
+        "200":
+          description: "Successfully read products list"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Product"
+    post:
+      tags:
+        - "ProductsManagement"
+      summary: "Creates a Product"
+      requestBody:
+              description: "The Product to add"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Product'
+      responses:
+        "200":
+          description: "Successfully added Product"
+
+  /products/{product_id}:
+    get:
+      tags:
+        - "ProductsManagement"
+      summary: "Returns the Product with the given id"
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+      responses:
+        "200":
+          description: "Successfully read Product details"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+    put:
+      tags:
+        - "ProductsManagement"
+      summary: "Update the Product with the given id"
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+      requestBody:
+              description: "Product updated"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Product'
+      responses:
+        "200":
+          description: "Successfully updated Product"
+    delete:
+      tags:
+        - "ProductsManagement"
+      summary: "Deletes the Product with the given id"
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+      responses:
+        "200":
+          description: "Successfully deleted Product"
+          
+  /news:
+    get:
+      tags:
+        - "NewsManagement"
+      summary: "Returns the list of all news in the system"
+      responses:
+        "200":
+          description: "Successfully read News list"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/News"
+    post:
+      tags:
+        - "NewsManagement"
+      summary: "Create News"
+      requestBody:
+              description: "The News to add"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/News'
+      responses:
+        "200":
+          description: "Successfully added News"
+
+  /news/{news_id}:
+    get:
+      tags:
+        - "NewsManagement"
+      summary: "Returns the News with the given id"
+      parameters:
+        - $ref: "#/components/parameters/news_id"
+      responses:
+        "200":
+          description: "Successfully read News details"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/News'
+    put:
+      tags:
+        - "NewsManagement"
+      summary: "Update the News with the given id"
+      parameters:
+        - $ref: "#/components/parameters/news_id"
+      requestBody:
+              description: "News updated"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/News'
+      responses:
+        "200":
+          description: "Successfully updated News"
+    delete:
+      tags:
+        - "NewsManagement"
+      summary: "Deletes the News with the given id"
+      parameters:
+        - $ref: "#/components/parameters/news_id"
+      responses:
+        "200":
+          description: "Successfully deleted News"
+
+  /markets:
+    get:
+      tags:
+        - "MarketsManagement"
+      summary: "Returns the list of all markets in the system"
+      responses:
+        "200":
+          description: "Successfully read Markets list"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Market"
+    post:
+      tags:
+        - "MarketsManagement"
+      summary: "Create a Market"
+      requestBody:
+              description: "The Market to add"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Market'
+      responses:
+        "200":
+          description: "Successfully added Market"
+
+  /markets/{market_id}:
+    get:
+      tags:
+        - "MarketsManagement"
+      summary: "Returns the Market with the given id"
+      parameters:
+        - $ref: "#/components/parameters/market_id"
+      responses:
+        "200":
+          description: "Successfully read Market details"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Market'
+    put:
+      tags:
+        - "MarketsManagement"
+      summary: "Update the Market with the given id"
+      parameters:
+        - $ref: "#/components/parameters/market_id"
+      requestBody:
+              description: "Market updated"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Market'
+      responses:
+        "200":
+          description: "Successfully updated News"
+    delete:
+      tags:
+        - "MarketsManagement"
+      summary: "Deletes the Market with the given id"
+      parameters:
+        - $ref: "#/components/parameters/market_id"
+      responses:
+        "200":
+          description: "Successfully deleted Market"
+          
+  /feedbacks:
+    get:
+      tags:
+        - "FeedbackManagement"
+      summary: "Returns the list of all feedback in the system"
+      responses:
+        "200":
+          description: "Successfully read Feedback list"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/Feedback"
+    post:
+      tags:
+        - "FeedbackManagement"
+      summary: "Create a Feedback"
+      requestBody:
+              description: "The Feedback to add"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Feedback'
+      responses:
+        "200":
+          description: "Successfully added Feedback"
+  /feedbacks/{product_id}:
+    get:
+      tags:
+        - "FeedbackManagement"
+      summary: "Returns the list of Feedbacks about the Product, with product_id"
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+      responses:
+        "200":
+          description: "Successfully read the list of Feedbacks"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Feedback'
+    delete:
+      tags:
+        - "FeedbackManagement"
+      summary: "Deletes all Feedbkacs for the Product, with product_id"
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+      responses:
+        "200":
+          description: "Successfully deleted Feedbacks"
+                
+
+  /feedbacks/{product_id}/{user_id}:
+    get:
+      tags:
+        - "FeedbackManagement"
+      summary: "Returns the Feedback given by the User, with user_id, about the Product, with product_id"
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: "Successfully read the Feedback"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+    put:
+      tags:
+        - "FeedbackManagement"
+      summary: "Update the Feedback given by the User, with user_id, about the Product, with product_id "
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+        - $ref: "#/components/parameters/user_id"
+      requestBody:
+              description: "Feedback updated"
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Feedback'
+      responses:
+        "200":
+          description: "Successfully updated News"
+    delete:
+      tags:
+        - "FeedbackManagement"
+      summary: "Deletes the Feedback"
+      parameters:
+        - $ref: "#/components/parameters/product_id"
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "200":
+          description: "Successfully deleted Market"
+                
