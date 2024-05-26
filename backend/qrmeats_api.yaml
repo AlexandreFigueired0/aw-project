@@ -41,13 +41,13 @@ components:
     User:
       type: "object"
       required:
-        - id
+        - user_id
         - username
         - password
         - email
         - photo_url
       properties:
-        id:
+        user_id:
           type: "string"
         username:
           type: "string"
@@ -60,11 +60,11 @@ components:
     Product:
       type: "object"
       required:
-        - id
+        - product_id
         - name
         - details
       properties:
-        id:
+        product_id:
           type: "string"
         name:
           type: "string"
@@ -75,12 +75,13 @@ components:
     News:
       type: "object"
       required:
-        - id
+        - news_id
         - title
         - source
         - main_text
+        - image_url
       properties:
-        id:
+        news_id:
           type: "string"
         title:
           type: "string"
@@ -88,14 +89,16 @@ components:
           type: "string"
         main_text:
           type: "string"
+        image_url:
+          type: "string"
     Market:
       type: "object"
       required:
-        - id
+        - market_id
         - name
         - location
       properties:
-        id:
+        market_id:
           type: "string"
         name:
           type: "string"
@@ -104,11 +107,11 @@ components:
     Feedback:
       type: "object"
       required:
-        - id
+        - feedback_id
         - user_id
         - product_id
       properties:
-        id:
+        feedback_id:
           type: "string"
         user_id:
           type: "string"
@@ -117,10 +120,10 @@ components:
     Stats:
       type: "object"
       required:
-        - id
+        - stats_id
         - stats
       properties:
-        id:
+        stats_id:
           type: "string"
         stats:
           type: "array"
@@ -129,12 +132,12 @@ components:
     ProductStockInMarket:
       type: "object"
       required:
-        - id
+        - product_stock_in_market_id
         - market_id
         - product_id
         - quantity
       properties:
-        id:
+        product_stock_in_market_id:
           type: "string"
         market_id:
           type: "string"
@@ -142,14 +145,14 @@ components:
           type: "string"
         quantity:
           type: "integer"
-    ProductsSavedByUser:
+    ProductSavedByUser:
       type: "object"
       required:
-        - id
+        - product_saved_by_user_id
         - user_id
         - product_id
       properties:
-        id:
+        product_saved_by_user_id:
           type: "string"
         user_id:
           type: "string"
@@ -214,7 +217,10 @@ paths:
               content:
                 application/json:
                   schema:
-                    type: "string"
+                    type: "object"
+                    properties:
+                      token:
+                        type: "string"
       responses:
         "200":
           description: "Successfully authenticated"
@@ -789,7 +795,7 @@ paths:
               schema:
                 type: "array"
                 items:
-                  $ref: "#/components/schemas/ProductsSavedByUser"
+                  $ref: "#/components/schemas/ProductSavedByUser"
     post:
       tags:
         - "UserSavedProductsManagement"
@@ -799,7 +805,7 @@ paths:
               content:
                 application/json:
                   schema:
-                    $ref: '#/components/schemas/ProductsSavedByUser'
+                    $ref: '#/components/schemas/ProductSavedByUser'
       responses:
         "200":
           description: "Successfully added ProductsSavedByUser"
@@ -818,7 +824,7 @@ paths:
               schema:
                 type: "array"
                 items:
-                  $ref: '#/components/schemas/ProductsSavedByUser'
+                  $ref: '#/components/schemas/ProductSavedByUser'
     delete:
       tags:
         - "UserSavedProductsManagement"
@@ -844,7 +850,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductsSavedByUser'
+                $ref: '#/components/schemas/ProductSavedByUser'
     put:
       tags:
         - "UserSavedProductsManagement"
@@ -857,13 +863,13 @@ paths:
               content:
                 application/json:
                   schema:
-                    $ref: '#/components/schemas/ProductsSavedByUser'
+                    $ref: '#/components/schemas/ProductSavedByUser'
       responses:
         "200":
           description: "Successfully updated ProductsSavedByUser"
     delete:
       tags:
-        - "MarketProductsInStockManagement"
+        - "UserSavedProductsManagement"
       summary: "Deletes the ProductsSavedByUser"
       parameters:
         - $ref: "#/components/parameters/product_id"
